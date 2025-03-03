@@ -44,11 +44,15 @@ img {
 }
 
 .output-container h1 {
-  color: rgb(33, 35, 34);
-  margin-bottom: 0;
+  color: rgb(49, 52, 51);
+  margin-bottom: 5px;
 }
 
 .output-container h2 {
   color: rgb(105, 111, 109);
   margin-bottom: 0;
+}
+
+.header p {
+  font-size: 18px;
 }
