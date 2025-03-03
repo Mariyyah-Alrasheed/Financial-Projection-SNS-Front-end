@@ -1,0 +1,54 @@
+.output-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: start;
+}
+
+img {
+  width: 100%;
+  max-width: 300px;
+}
+
+.img-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.logo {
+  width: 200px;
+  border-radius: 10px;
+}
+
+.about-company {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  column-gap: 1rem;
+}
+
+.output-container h1 {
+  color: rgb(33, 35, 34);
+  margin-bottom: 0;
+}
+
+.output-container h2 {
+  color: rgb(105, 111, 109);
+  margin-bottom: 0;
+}
