@@ -1,0 +1,127 @@
+.container {
+    width: 60%;
+    max-width: 600px;
+    min-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  
+  .container h1 {
+    color: var(--onyx);
+    font-size: 4rem;
+    margin: 0;
+    letter-spacing: -1px;
+  }
+  
+  .container .welcome-msg p {
+    color: var(--silver);
+    font-size: 1.5rem;
+    margin: 2rem 0 0 0;
+    justify-self: flex-end;
+  }
+  
+  .container .welcome-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-container {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  
+  .search-container button {
+    padding: 1rem 4rem;
+    margin-bottom: -1rem;
+  }
+  
+  .background {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    width: 100%;
+  
+    background: var(--purple);
+    padding: 5rem 7rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  label {
+    display: block;
+  
+    font-size: 1.3rem;
+    text-align: start;
+    font-weight: 600;
+    letter-spacing: 1px;
+  
+    margin-bottom: 0.9rem;
+    margin-top: 1.3rem;
+  }
+  
+  .dropdown,
+  .date {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+  
+    font-size: 1.3rem;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  
+    background-color: rgba(168, 224, 231, 0.125);
+  }
+  
+  option {
+    background-color: rgba(45, 8, 68, 0.711);
+  }
+  
+  .radio-buttons,
+  .radio-buttons span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .radio-buttons {
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  .radio-buttons span {
+    column-gap: 0.6rem;
+  }
+  
+  .radio-buttons label {
+    letter-spacing: 0;
+    font-size: 1.5rem;
+  }
+  
+  .radio-buttons input {
+    appearance: none;
+  
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgb(108, 98, 98);
+  }
+  
+  .radio-buttons input:checked {
+    border: 6px solid var(--coral);
+  }
+  
+  .radio-buttons input:hover:not(:checked) {
+    border: 6px solid var(--silver);
+  }
+  
+  .radio-buttons > * {
+    color: var(--onyx);
+  }

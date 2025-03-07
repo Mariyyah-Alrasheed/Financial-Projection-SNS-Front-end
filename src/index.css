@@ -1,41 +1,77 @@
 body {
   font-family: Arial, sans-serif;
+  background-color: white; /* Dark background for better contrast */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #root {
   width: 100%;
-  color: rgb(68, 73, 73);
-}
-
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input,
-select,
-button {
-  padding: 8px;
-  margin: 5px 0;
-  font-size: 16px;
-}
-
-button {
-  background-color: #007bff;
+  height: 100%;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Global Variables */
+:root {
+  font-size: 10px;
+  --purple: #4f008c;
+  --coral: #ff375e;
+  --onyx:  #1d252d;;
+  --silver: #8e9aa0;
+  --moon-light: #a54ee1;
+}
+
+/* Submit Button */
+.submit-button {
+  width: fit-content;
+  padding: 1rem 2rem;
+  margin-top: 3rem;
+ 
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+ 
+  background-color: var(--coral);
   border: none;
+  border-radius: 8px;
+ 
   cursor: pointer;
 }
-
-button:hover {
-  background-color: #0056b3;
+ 
+.submit-button:hover {
+  filter: brightness(0.9);
 }
+/* Header with STC Logo */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* STC Logo */
+.stc-logo-container {
+  background-color: var(--onyx); /* Dark background for contrast */
+  padding: 10px;
+  border-radius: 8px; /* Soft edges */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stc-logo {
+  width: 120px; /* Adjust as needed */
+  height: auto;
+}
+
+p {
+  font-size: 1.6rem;
+  text-align: center;
+}
+
