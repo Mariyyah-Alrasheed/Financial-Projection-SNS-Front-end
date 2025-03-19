@@ -1,9 +1,6 @@
-import image from "../assets/apple.webp";
-import YtestYpredect from "../assets/YtestYpredect.png";
-import outliers3 from "../assets/outliers3.png";
-import HistogramStock from "../assets/HistogramStock.png";
-import stcLogo from "../assets/STC_logo.png";
-
+import googleLogo from "../assets/google.webp";
+import appleLogo from "../assets/apple.webp";
+import microsoftLogo from "../assets/microsoft.avif";
 import "./Output.css";
 
 import React, { useEffect, useState } from "react";
@@ -14,72 +11,101 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-
-export default function Output({ ticker ,date }) {
+export default function Output({ ticker, date }) {
   const navigate = useNavigate();
-  const [advice, setAdvice] = useState(null);  // Use null for better conditional rendering
+  const [advice, setAdvice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [stockData, setStockData] = useState(null); // Store stock price data
+  const [stockData, setStockData] = useState(null);
+  const [daysDifference, setDaysDifference] = useState(null);
+  const [companyImages, setCompanyImages] = useState([]);
+  const BASE_URL = "http://127.0.0.1:5000"; 
 
+  // Calculate the number of days difference
   useEffect(() => {
-    if (ticker === "AAPL") {
+    if (date) {
+      const selectedDate = new Date(date);
+      const today = new Date();
+      const timeDiff = selectedDate - today;
+      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      setDaysDifference(daysDiff);
+    }
+  }, [date]);
+
+  // Fetch investment advice, stock data, and images
+  useEffect(() => {
+    if (ticker && daysDifference !== null) {
       setLoading(true);
-      // Fetching investment advice
-      fetch(`http://127.0.0.1:5000/api/investment_advice?company=AAPL`)
-        .then((response) => {
-          if (!response.ok) throw new Error("Failed to fetch investment advice");
-          return response.json();
-        })
+      setError(null);
+
+      fetch(`${BASE_URL}/api/investment_advice?company=${ticker}&days=${daysDifference}`)
+        .then((response) => response.ok ? response.json() : Promise.reject("Failed to fetch investment advice"))
         .then((data) => setAdvice(data?.investment_advice || "No advice available."))
-        .catch((error) => setError(error.message))
+        .catch(setError)
         .finally(() => setLoading(false));
 
-      // Fetching stock data
-      fetch(`http://127.0.0.1:5000/api/predict?company=AAPL`)
-        .then((response) => {
-          if (!response.ok) throw new Error("Failed to fetch stock data");
-          return response.json();
-        })
-        .then((data) => {
-          setStockData({
-            dates: data.dates,   // Dates array (x-axis)
-            prices: data.prices, // Prices array (y-axis)
-          });
-        })
-        .catch((error) => setError(error.message));
-    }
-  }, [ticker]);
+      fetch(`${BASE_URL}/api/predict?company=${ticker}&days=${daysDifference}`)
+        .then((response) => response.ok ? response.json() : Promise.reject("Failed to fetch stock data"))
+        .then((data) => setStockData({ dates: data.dates, prices: data.prices }))
+        .catch(setError);
 
+      fetch(`${BASE_URL}/images/${ticker}`)
+        .then((response) => response.ok ? response.json() : Promise.reject("Failed to fetch images"))
+        .then((data) => {
+          const descriptionsMap = {
+            "histogram": "Histogram showing distribution of stock prices.",
+            "moving_average": "Moving average of the stock prices over time.",
+            "outliers": "Outliers identified in the stock price data.",
+            "volume_outliers": "Volume outliers showing unusual trading volume.",
+          };
+
+          const imagesWithDescriptions = data.images.map((img) => {
+            const fileName = img.split("/").pop();
+            const key = Object.keys(descriptionsMap).find((desc) => fileName.includes(desc));
+
+            return {
+              src: `${BASE_URL}${img}`,
+              description: key ? descriptionsMap[key] : "No description available.",
+            };
+          });
+
+          setCompanyImages(imagesWithDescriptions);
+        })
+        .catch(setError);
+    }
+  }, [ticker, daysDifference]);
+
+  // Go back to the previous page
   const goBack = () => {
     navigate(-1);
   };
 
+  // Companies data
   const companies = [
-    { id: "1", ticker: "GOOGL", name: "Google", img: "src/assets/google.webp", text: "Google faces legal challenges over its Play Store." },
-    { id: "2", ticker: "AAPL", name: "Apple", img: "src/assets/apple.webp", text: " " },
-    { id: "3", ticker: "MSFT", name: "Microsoft", img: "src/assets/microsoft.avif", text: "Microsoft fined $242M for patent infringement on Cortana." },
-    { id: "4", ticker: "SSNLF", name: "Samsung", img: "public/assets/google.webp", text: "Samsung ordered to pay $192M for patent violations." },
+    { id: "1", ticker: "GOOGL", name: "Google", img: googleLogo, text: "Google faces legal challenges over its Play Store." },
+    { id: "2", ticker: "AAPL", name: "Apple", img: appleLogo, text: " " },
+    { id: "3", ticker: "MSFT", name: "Microsoft", img: microsoftLogo, text: "Microsoft fined $242M for patent infringement on Cortana." },
   ];
 
+  // Chart data
   const chartData = {
-    labels: stockData?.dates || [],  // X-axis labels (dates)
+    labels: stockData?.dates || [],
     datasets: [
       {
         label: "Stock Price (USD)",
-        data: stockData?.prices || [],  // Y-axis data (prices)
+        data: stockData?.prices || [],
         fill: false,
         borderColor: "rgba(75,192,192,1)",
         tension: 0.1,
       },
     ],
   };
+
   const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false, // Allow full height/width control
+    maintainAspectRatio: false,
   };
-    
-   
+
   return (
     <div className="output-parent">
       {companies.map(
@@ -87,56 +113,57 @@ export default function Output({ ticker ,date }) {
           company.ticker === ticker && (
             <div key={company.id} className="output-container">
               <div className="about-company">
-                <h1>{company.name}</h1>
+                <h1>{company.name}  
+                  {date && (
+                    <p>
+                      Selected Date: {date} <br />
+                      Days from Today: {daysDifference} days
+                    </p>
+                  )}
+                </h1>
                 <div className="header">
-                  <img className="logo" src={image} alt={`${company.name} Logo`} />
+                  <img className="logo" src={company.img} alt={`${company.name} Logo`} />
                   <p>{company.text}</p>
-                  {/* {ticker === "AAPL" && (
-                    <div>
-                      {loading ? (
-                        <p>Fetching investment advice and stock data...</p>
-                      ) : error ? (
-                        <p style={{ color: "red" }}>Error: {error}</p>
-                      ) : (
-                        <p><strong>Investment Advice:</strong> {advice}</p>
-                      )}
-                    </div>
-                  )} */}
                 </div>
               </div>
-              {ticker === "AAPL" && (
-                    <div>
-                      {loading ? (
-                        <p>Fetching investment advice and stock data...</p>
-                      ) : error ? (
-                        <p style={{ color: "red" }}>Error: {error}</p>
-                      ) : (
-                        <p><strong>Investment Advice:</strong> {advice}</p>
-                      )}
-                    </div>
-                  )}
+
+              {loading ? (
+                <p>Fetching investment advice and stock data...</p>
+              ) : error ? (
+                <p style={{ color: "red" }}>Error: {error}</p>
+              ) : (
+                <p><strong>Investment Advice:</strong> {advice}</p>
+              )}
+
               <h2>Stock Price Over Time</h2>
               <div className="chart-container2">
-              {stockData && (
                 <div className="chart-container">
-                  <Line data={chartData} options={chartOptions} />
+                  {stockData?.dates && stockData?.prices ? (
+                    <Line data={chartData} options={chartOptions} />
+                  ) : (
+                    <p>Loading stock chart...</p>
+                  )}
                 </div>
-              )}
               </div>
-              <h2>Data visualization</h2>
-              <div className="img-grid">
-                <span>
-                  <img src={YtestYpredect} alt="Sales data visualization" />
-                  <p>Y test & Y predict</p>
-                </span>
-                <span>
-                  <img src={outliers3} alt="Insights data visualization" />
-                  <p>Volume with outliers highlighted</p>
-                </span>
-                <span>
-                  <img src={HistogramStock} alt="Customer data visualization" />
-                  <p>Histogram of stock closing prices</p>
-                </span>
+
+              <div>
+              <h2 className="text-2xl font-semibold mb-6">Data Visualization</h2>
+<div className="data-visualization-container">
+  {companyImages.length > 0 ? (
+    companyImages.map((imgObj, index) => (
+      <div key={index} className="visualization-card">
+        <img src={imgObj.src} alt={`Visualization ${index + 1}`} />
+        <div className="visualization-description">
+          <p className="text-title">{imgObj.key}</p>
+          <p className="text-subtitle">{imgObj.description}</p>
+        </div>
+      </div>
+    ))
+  ) : (
+    <p className="text-gray-500">No images available.</p>
+  )}
+</div>
+
               </div>
             </div>
           )
@@ -144,6 +171,4 @@ export default function Output({ ticker ,date }) {
       <button className="submit-button" onClick={goBack}>Go Back</button>
     </div>
   );
- 
- 
 }

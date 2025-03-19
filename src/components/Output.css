@@ -122,3 +122,76 @@
   align-items: center;
   width: 100%;
 }
+
+
+
+
+
+/* Style for the visualization card */
+.visualization-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 90%;
+  max-width: 800px;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease-in-out;
+  text-align: center; /* Center content */
+  overflow: hidden; /* Ensures content doesn't overflow on hover */
+}
+
+.visualization-card:hover {
+  transform: translateY(-5px); /* Lift the card when hovered */
+}
+
+/* Ensure the image is fully displayed */
+.visualization-card img {
+  width: 100%;
+  height: auto; /* Adjusts height automatically */
+  max-height: 400px; /* Prevents excessively large images */
+  object-fit: contain; /* Ensures full image visibility */
+  border-radius: 8px;
+  display: block; /* Removes extra space below images */
+  margin: 0 auto; /* Centers the image */
+  transition: opacity 0.3s ease-in-out; /* Smooth fade effect */
+  max-width: 400px;
+}
+
+/* Hover effect for the image */
+.visualization-card:hover img {
+  opacity: 0.7; /* Dim the image slightly when hovered */
+}
+
+/* Description section */
+.visualization-description {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease-in-out; /* Smooth fade-in */
+}
+
+/* Show description on hover */
+.visualization-card:hover .visualization-description {
+  opacity: 1; /* Show the description when hovered */
+}
+
+.visualization-description p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .visualization-card {
+    width: 95%;
+  }
+
+  .visualization-card img {
+    max-height: 300px; /* Adjust height for smaller screens */
+  }
+}
