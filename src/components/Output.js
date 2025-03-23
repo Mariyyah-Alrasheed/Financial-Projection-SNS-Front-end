@@ -19,7 +19,7 @@ export default function Output({ ticker, date }) {
   const [stockData, setStockData] = useState(null);
   const [daysDifference, setDaysDifference] = useState(null);
   const [companyImages, setCompanyImages] = useState([]);
-  const BASE_URL = "http://127.0.0.1:5000"; 
+  const BASE_URL = "https://stc-backend-kzyx.onrender.com"; 
 
   // Calculate the number of days difference
   useEffect(() => {
